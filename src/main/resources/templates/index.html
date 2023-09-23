@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- Bootstrap JS (Optional for the hamburger menu functionality) -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+	<link th:href="@{/css/styles.css}" rel="stylesheet" type="text/css" />
+
+	<title>Home page</title>
+
+</head>
+
+<body>
+	<div class="main-content mb-3">
+		<!-- Navbar -->
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+			<a class="navbar-brand" href="#">EMP System</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item active">
+						<a class="nav-link" href="addemp">Add EMP</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<!-- Navbar End-->
+
+		<div th:if=${session.msg}>
+			<div class="alert alert-success" role="alert" th:text="${session.msg}">
+			</div>
+			<th:block th:text="${#session.removeAttribute('msg')}"></th:block>
+		</div>
+		<div class="container col-md-10 p-5">
+			<table class="table table-striped" border="1">
+				<thead class="bg-primary text-white">
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Name</th>
+						<th scope="col">Address</th>
+						<th scope="col">Email</th>
+						<th scope="col">Phone No</th>
+						<th scope="col">Salary</th>
+						<th scope="col">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="e : ${emp}">
+						<th th:text="${e.id}">1</th>
+						<td th:text="${e.name}"></td>
+						<td th:text="${e.address}"></td>
+						<td th:text="${e.email}"></td>
+						<td th:text="${e.phno}"></td>
+						<td th:text="${e.salary}"></td>
+						<td>
+							<a class="btn btn-sm btn-primary" th:href="@{/edit/{id}(id=${e.id})}">Edit</a>
+							<a class="btn btn-sm btn-danger" th:href="@{/delete/{id}(id=${e.id})}">Delete</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div th:fragment="pagination" class="pagination">
+		<!-- Pagination-->
+			<span>Total Employee: [[${totalItem}]]</span>
+
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					<li th:if="${currentPage !=0}" class="page-item">
+						<a class="page-link" th:href="@{'/page/'+${currentPage-1}}">Previous</a>
+					</li>
+					<li th:each="i:${#numbers.sequence(1,totalPages)}"
+						th:classappend="${currentPage==i-1 ? 'active' : '' }" class="page-item">
+						<a class="page-link" th:href="@{'/page/'+${i-1}}">[[${i}]]</a>
+					</li>
+					<li th:if="${currentPage+1!=totalPages}" class="page-item">
+						<a class="page-link" th:href="@{'/page/'+${currentPage+1}}">Next</a>
+					</li>
+				</ul>
+			</nav>
+	</div>
+	<div>
+		<!-- Footer -->
+		<footer th:fragment="footer" class="footer bg-primary text-white text-center ">
+			<span>EMP System &copy; 2023. All rights reserved.</span>
+		</footer>
+		<!-- Footer -->
+	</div>
+
+</body>
+
+</html>
